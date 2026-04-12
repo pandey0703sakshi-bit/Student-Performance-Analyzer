@@ -1,4 +1,4 @@
-🎓 Student Performance Analyzer
+##🎓 Student Performance Analyzer
 Data Analytics + UX Case Study
 🌟 Overview
 
