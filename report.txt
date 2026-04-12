@@ -1,0 +1,88 @@
+============================================================
+       STUDENT PERFORMANCE ANALYZER — REPORT
+       Generated on: 12 April 2026, 11:23 PM
+============================================================
+
+[ CLASS OVERVIEW ]
+  Total students analysed  : 25
+  Class average (overall)  : 66.29
+  Pass rate (avg >= 50)    : 72.0%
+  Good attendance rate     : 60.0%
+
+[ SUBJECT-WISE AVERAGES ]
+  Math        : 66.24
+  Science     : 65.08
+  English     : 67.56
+  Strongest   : English
+  Weakest     : Science
+
+[ TOP PERFORMERS ]
+  Criteria : Average >= 80 AND Attendance >= 85%
+  Count    : 8 students
+
+  Aarav Sharma           Avg: 82.0   Attendance: 92%
+  Sneha Iyer             Avg: 91.33   Attendance: 98%
+  Arjun Joshi            Avg: 91.33   Attendance: 96%
+  Divya Pillai           Avg: 83.33   Attendance: 91%
+  Aditya Kumar           Avg: 87.67   Attendance: 95%
+  Riya Desai             Avg: 86.67   Attendance: 93%
+  Prachi Khanna          Avg: 93.0   Attendance: 99%
+  Simran Kaur            Avg: 80.0   Attendance: 89%
+
+[ AT-RISK STUDENTS ]
+  Criteria : Average < 50 OR Attendance < 65%
+  Count    : 7 students
+
+  Priya Patel            Avg: 44.67   Attendance: 60%
+  Karan Singh            Avg: 37.33   Attendance: 52%
+  Meera Kapoor           Avg: 31.67   Attendance: 45%
+  Siddharth Roy          Avg: 41.0   Attendance: 58%
+  Tanvi Shah             Avg: 48.67   Attendance: 63%
+  Saurabh Tiwari         Avg: 38.0   Attendance: 50%
+  Harsh Chauhan          Avg: 43.33   Attendance: 55%
+
+[ ATTENDANCE IMPACT ]
+  Avg marks (attendance >= 75%) : 79.98
+  Avg marks (attendance <  75%) : 45.77
+  Performance gap               : 34.21 marks
+  Correlation coefficient       : 0.99 (strong positive)
+
+[ INDIVIDUAL STUDENT SUMMARY ]
+  Name                    Math  Science English    Avg  Attend  Status
+  --------------------------------------------------------------------
+  Prachi Khanna             95       93      91   93.0     99%  TOP
+  Arjun Joshi               94       91      89  91.33     96%  TOP
+  Sneha Iyer                91       88      95  91.33     98%  TOP
+  Aditya Kumar              90       85      88  87.67     95%  TOP
+  Riya Desai                86       84      90  86.67     93%  TOP
+  Divya Pillai              83       79      88  83.33     91%  TOP
+  Aarav Sharma              88       76      82   82.0     92%  TOP
+  Simran Kaur               80       77      83   80.0     89%  TOP
+  Ananya Gupta              78       80      74  77.33     88%  Average
+  Ishaan Malhotra           76       74      80  76.67     87%  Average
+  Neha Jain                 74       71      78  74.33     86%  Average
+  Rohan Mehta               72       68      75  71.67     85%  Average
+  Rahul Verma               67       72      69  69.33     80%  Average
+  Manish Rao                70       65      73  69.33     82%  Average
+  Pooja Reddy               62       70      65  65.67     78%  Average
+  Akash Bose                61       58      64   61.0     74%  Average
+  Kavya Nambiar             58       53      61  57.33     68%  Average
+  Vikram Nair               55       49      60  54.67     70%  Average
+  Tanvi Shah                48       52      46  48.67     63%  AT-RISK
+  Priya Patel               45       39      50  44.67     60%  AT-RISK
+  Harsh Chauhan             43       47      40  43.33     55%  AT-RISK
+  Siddharth Roy             41       38      44   41.0     58%  AT-RISK
+  Saurabh Tiwari            37       42      35   38.0     50%  AT-RISK
+  Karan Singh               33       41      38  37.33     52%  AT-RISK
+  Meera Kapoor              29       35      31  31.67     45%  AT-RISK
+
+[ RECOMMENDATIONS ]
+  1. Schedule extra Science sessions — weakest subject class-wide.
+  2. Contact 7 at-risk students for counselling immediately.
+  3. Introduce attendance incentives — correlation with marks is 0.99.
+  4. Use top 8 performers as peer mentors.
+  5. Investigate root causes of low attendance in flagged students.
+
+============================================================
+  END OF REPORT
+============================================================

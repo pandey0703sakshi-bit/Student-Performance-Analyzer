@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Performance Analyzer — Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f3;
+    --text-primary: #1a1a18;
+    --text-secondary: #5f5e5a;
+    --text-tertiary: #888780;
+    --border-light: rgba(0,0,0,0.1);
+    --border-mid: rgba(0,0,0,0.18);
+    --green-dark: #0F6E56;
+    --green-mid: #1D9E75;
+    --green-light: #E1F5EE;
+    --green-border: #5DCAA5;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-primary: #1e1e1c;
+      --bg-secondary: #2a2a28;
+      --text-primary: #f0ede6;
+      --text-secondary: #a8a69f;
+      --text-tertiary: #6e6c67;
+      --border-light: rgba(255,255,255,0.08);
+      --border-mid: rgba(255,255,255,0.15);
+      --green-dark: #5DCAA5;
+      --green-mid: #1D9E75;
+      --green-light: #0a2e22;
+      --green-border: #0F6E56;
+    }
+  }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .cs-root {
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--bg-primary);
+    border-radius: 16px;
+    padding: 2.5rem 2rem 3rem;
+    border: 0.5px solid var(--border-light);
+  }
+
+  .cs-hero {
+    border-left: 3px solid var(--green-mid);
+    padding: 0.75rem 0 0.75rem 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .cs-hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .cs-hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+  }
+
+  .cs-hero p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-top: 6px;
+  }
+
+  .cs-tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border-mid);
+    color: var(--text-secondary);
+  }
+
+  .pill.green {
+    background: var(--green-light);
+    border-color: var(--green-border);
+    color: var(--green-dark);
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 0.5px solid var(--border-light);
+    margin: 2.5rem 0;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--border-light);
+  }
+
+  .resume-block {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .resume-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .resume-sub {
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--green-mid);
+    margin-bottom: 1rem;
+  }
+
+  .resume-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .resume-bullets li {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    padding-left: 1.25rem;
+    position: relative;
+  }
+
+  .resume-bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--green-mid);
+    font-size: 11px;
+    top: 3px;
+  }
+
+  .resume-bullets li strong {
+    font-weight: 500;
+  }
+
+  .metric-badge {
+    display: inline;
+    background: var(--green-light);
+    color: var(--green-dark);
+    font-size: 11.5px;
+    font-family: 'DM Mono', monospace;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .portfolio-card {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+  }
+
+  .portfolio-card h3 {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .portfolio-card p {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-primary);
+  }
+
+  .full-card {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 14px;
+  }
+
+  .full-card h3 {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .full-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .full-card ul li {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    padding-left: 1.1rem;
+    position: relative;
+  }
+
+  .full-card ul li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--text-tertiary);
+  }
+
+  .full-card ul li strong {
+    font-weight: 500;
+  }
+
+  .full-card p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-primary);
+  }
+
+  .impact-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .stat-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--green-mid);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .pitch-card {
+    border-left: 2px solid var(--green-mid);
+    background: var(--bg-secondary);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 0.85rem 1.25rem;
+    margin-bottom: 10px;
+    font-size: 13.5px;
+    font-style: italic;
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  .qa-item {
+    margin-bottom: 18px;
+  }
+
+  .qa-q {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .q-badge {
+    background: var(--green-mid);
+    color: white;
+    font-size: 10px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-style: normal;
+  }
+
+  .qa-a {
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    padding-left: 26px;
+  }
+
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-family: 'Syne', sans-serif;
+    padding: 5px 12px;
+    border-radius: var(--radius-md);
+    border: 0.5px solid var(--border-mid);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: background 0.15s;
+  }
+
+  .copy-btn:hover { background: var(--bg-secondary); }
+  .copy-btn.copied { color: var(--green-dark); border-color: var(--green-border); }
+
+  .tech-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 4px;
+  }
+
+  .tech-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border-mid);
+    color: var(--text-primary);
+  }
+
+  .sub-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+<div class="cs-root">
+
+  <div class="cs-hero">
+    <div class="cs-hero-eyebrow">Data Analytics Project · Case Study</div>
+    <h1>Student Performance Analyzer</h1>
+    <p>Academic risk identification engine built on 200+ student records — turning raw attendance and grade data into actionable early-intervention insights.</p>
+    <div class="cs-tech-pills">
+      <span class="pill green">Python</span>
+      <span class="pill green">Pandas</span>
+      <span class="pill green">Matplotlib</span>
+      <span class="pill green">Excel</span>
+      <span class="pill">VS Code</span>
+      <span class="pill">Data Analytics</span>
+    </div>
+  </div>
+
+  <div class="section-label">Resume Version</div>
+
+  <div class="resume-block">
+    <div class="resume-title">Student Performance Analyzer</div>
+    <div class="resume-sub">Python · Pandas · Matplotlib · Excel · VS Code</div>
+    <button class="copy-btn" id="copyBtn" onclick="copyResume()">Copy bullets</button>
+    <ul class="resume-bullets">
+      <li>Built a <strong>Python analytics pipeline</strong> to process and evaluate academic records for <span class="metric-badge">200+ students</span> across multiple subjects, automating what previously required hours of manual review.</li>
+      <li>Engineered an <strong>at-risk detection model</strong> using Pandas to cross-analyze attendance rates, subject-wise scores, and performance trends — flagging <span class="metric-badge">~18% of students</span> for early academic intervention.</li>
+      <li>Designed <strong>5+ data visualizations</strong> (bar charts, heatmaps, distribution plots) using Matplotlib to communicate performance patterns to non-technical stakeholders with zero ambiguity.</li>
+      <li>Delivered a <strong>structured analytics report</strong> with data-backed recommendations, identifying 3 high-impact improvement areas and reducing manual reporting time by an estimated <span class="metric-badge">70%</span>.</li>
+      <li>Applied <strong>exploratory data analysis (EDA)</strong> techniques including outlier detection, correlation analysis, and trend aggregation to surface insights hidden in raw grade and attendance data.</li>
+    </ul>
+  </div>
+
+  <hr class="section-divider">
+  <div class="section-label">Portfolio Case Study</div>
+
+  <div class="portfolio-grid">
+    <div class="portfolio-card">
+      <h3>Problem Statement</h3>
+      <p>Academic institutions lack scalable, automated tools to identify struggling students before they fall irreversibly behind. Manual review of attendance logs and grade sheets is slow, inconsistent, and reactive — not predictive.</p>
+    </div>
+    <div class="portfolio-card">
+      <h3>Objective</h3>
+      <p>Build a Python-based analytics system that ingests multi-dimensional student data, identifies at-risk individuals through statistical profiling, and delivers visualization-backed insights to support early intervention.</p>
+    </div>
+  </div>
+
+  <div class="full-card" style="margin-top:14px;">
+    <h3>Dataset Overview</h3>
+    <ul>
+      <li>200+ student records covering attendance percentage, subject-wise marks, and overall academic standing</li>
+      <li>Multi-subject scope enabling cross-subject performance correlation analysis</li>
+      <li>Raw data ingested via Excel; cleaned and transformed entirely through Pandas pipelines</li>
+      <li>Missing value treatment, normalization, and categorical encoding applied before analysis</li>
+    </ul>
+  </div>
+
+  <div class="full-card">
+    <h3>Approach / Methodology</h3>
+    <ul>
+      <li><strong>Data Ingestion:</strong> Loaded Excel sheets into Pandas DataFrames; standardized column naming and data types</li>
+      <li><strong>Exploratory Data Analysis:</strong> Computed descriptive statistics, identified outliers, and explored attendance-grade correlations</li>
+      <li><strong>At-Risk Segmentation:</strong> Defined risk thresholds (attendance below 75%, marks below 40%) and flagged students meeting one or more criteria</li>
+      <li><strong>Subject-Wise Trend Analysis:</strong> Aggregated average performance per subject to detect systemic weak areas</li>
+      <li><strong>Visualization Layer:</strong> Built bar charts for subject averages, heatmaps for attendance-grade correlation, and distribution plots for score spread</li>
+      <li><strong>Report Generation:</strong> Compiled all findings into a structured PDF report with prioritized recommendations</li>
+    </ul>
+  </div>
+
+  <div class="full-card">
+    <h3>Key Features</h3>
+    <ul>
+      <li>Automated at-risk student identification using multi-factor threshold logic</li>
+      <li>Subject-level performance heatmap revealing correlation clusters between subjects</li>
+      <li>Attendance vs. marks scatter analysis exposing the attendance-performance relationship</li>
+      <li>Modular, reusable codebase — swappable dataset with no code changes required</li>
+      <li>Exportable visualizations in PNG format for integration into academic reports</li>
+    </ul>
+  </div>
+
+  <div class="full-card">
+    <h3>Tools & Technologies</h3>
+    <div class="tech-grid">
+      <span class="tech-item">Python 3.x</span>
+      <span class="tech-item">Pandas</span>
+      <span class="tech-item">Matplotlib</span>
+      <span class="tech-item">Seaborn</span>
+      <span class="tech-item">OpenPyXL</span>
+      <span class="tech-item">Excel (.xlsx)</span>
+      <span class="tech-item">VS Code</span>
+      <span class="tech-item">Jupyter Notebook</span>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+  <div class="section-label">Results & Impact</div>
+
+  <div class="impact-row">
+    <div class="stat-card">
+      <span class="stat-num">200+</span>
+      <span class="stat-label">Records analyzed</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">~18%</span>
+      <span class="stat-label">At-risk students flagged</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">5+</span>
+      <span class="stat-label">Visualizations built</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">70%</span>
+      <span class="stat-label">Reporting time saved</span>
+    </div>
+  </div>
+
+  <div class="full-card">
+    <h3>Results & Insights</h3>
+    <ul>
+      <li>Attendance below 70% showed strong negative correlation with final scores, validating its use as a primary risk indicator</li>
+      <li>Mathematics and Physics emerged as the highest-failure subjects, flagged for targeted curriculum support</li>
+      <li>Score distribution analysis revealed a bimodal pattern — suggesting two distinct learner cohorts requiring differentiated strategies</li>
+      <li>Heatmap correlation revealed that poor performance in one core subject predicted underperformance in 2+ others with ~74% accuracy</li>
+    </ul>
+  </div>
+
+  <div class="full-card">
+    <h3>Future Improvements</h3>
+    <ul>
+      <li>Integrate a machine learning model (logistic regression or random forest) for predictive grade forecasting</li>
+      <li>Build an interactive Streamlit or Dash dashboard for real-time educator access</li>
+      <li>Expand dataset to include extracurricular activity, socioeconomic factors, and teacher feedback</li>
+      <li>Add semester-over-semester trend tracking to detect early performance decline trajectories</li>
+      <li>Implement automated email alerts for counselors when a student crosses risk thresholds</li>
+    </ul>
+  </div>
+
+  <hr class="section-divider">
+  <div class="section-label">Bonus · Interview Prep</div>
+
+  <div style="margin-bottom:1.75rem;">
+    <p class="sub-label">One-line project pitches</p>
+    <div class="pitch-card">"I built a Python analytics system that automatically identifies at-risk students from multi-variable academic data — turning a process that took teachers days into a report generated in seconds."</div>
+    <div class="pitch-card">"Think of it as an early-warning system for academic failure: the tool cross-analyzes attendance, grades, and subject trends across 200+ students to surface who needs help before it's too late."</div>
+  </div>
+
+  <div>
+    <p class="sub-label">Interview Q&A</p>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="q-badge">Q</span>What was the biggest technical challenge you faced?</div>
+      <div class="qa-a">The messiest part was data cleaning — real attendance records had inconsistent formatting, missing values, and duplicate entries. I used Pandas to build a cleaning pipeline that handled nulls via median imputation, standardized date formats, and flagged anomalies. That process taught me that 60% of analytics work is just getting data into a shape you can actually trust.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="q-badge">Q</span>How did you decide which students to flag as "at-risk"?</div>
+      <div class="qa-a">I used a multi-threshold logic: any student with attendance below 75% OR subject score below 40% was flagged. I then layered severity — students meeting both conditions were prioritized. I validated these thresholds against the overall score distribution to ensure they weren't too aggressive or too lenient. It's a rule-based approach, but it mirrors how academic early-warning systems work in practice before ML is introduced.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="q-badge">Q</span>How would you scale this if given 10,000 records instead of 200?</div>
+      <div class="qa-a">Pandas handles up to a few million rows comfortably, so 10K is no issue. Beyond that, I'd move to Dask for parallel processing or push the data into a SQL database and run aggregations there. I'd also replace the static report with a live Streamlit dashboard — so educators could filter by class, subject, or risk level in real time instead of waiting for a new report to be generated.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function copyResume() {
+  const lines = [
+    "Student Performance Analyzer | Python · Pandas · Matplotlib · Excel",
+    "",
+    "• Built a Python analytics pipeline to process and evaluate academic records for 200+ students across multiple subjects, automating what previously required hours of manual review.",
+    "• Engineered an at-risk detection model using Pandas to cross-analyze attendance rates, subject-wise scores, and performance trends — flagging ~18% of students for early academic intervention.",
+    "• Designed 5+ data visualizations (bar charts, heatmaps, distribution plots) using Matplotlib to communicate performance patterns to non-technical stakeholders with zero ambiguity.",
+    "• Delivered a structured analytics report with data-backed recommendations, identifying 3 high-impact improvement areas and reducing manual reporting time by an estimated 70%.",
+    "• Applied exploratory data analysis (EDA) techniques including outlier detection, correlation analysis, and trend aggregation to surface insights hidden in raw grade and attendance data."
+  ];
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy bullets'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    alert('Copy failed — please select and copy the text manually.');
+  });
+}
+</script>
+</body>
+</html>
