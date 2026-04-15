@@ -3,3 +3,4 @@ matplotlib
 seaborn
 streamlit
 openpyxl
+pip3 freeze > requirements.txt

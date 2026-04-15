@@ -18,18 +18,18 @@ import datetime
 st.set_page_config(
     page_title="Student Performance Analyzer",
     page_icon="📊",
-    layout="wide"        # use full browser width
+    layout="wide"
 )
 
 # ============================================================
 # CONFIGURATION
 # ============================================================
 
-TOP_AVG           = 80
-TOP_ATT           = 85
-RISK_AVG          = 50
-RISK_ATT          = 65
-GOOD_ATTENDANCE   = 75
+TOP_AVG         = 80
+TOP_ATT         = 85
+RISK_AVG        = 50
+RISK_ATT        = 65
+GOOD_ATTENDANCE = 75
 
 # ============================================================
 # HELPER FUNCTIONS
@@ -43,8 +43,6 @@ def get_status(row):
     else:
         return "Average"
 
-
-import os  # add this at the very top of dashboard.py with your other imports
 
 def load_data(file):
     """Load CSV or Excel from an uploaded file object."""
@@ -60,7 +58,6 @@ def load_data(file):
         # If first column looks like a report title (not "Name"), skip rows
         # and search for the real header row
         if "Name" not in df.columns and "name" not in [c.lower() for c in df.columns]:
-            # Re-read the raw file scanning up to 10 rows for the real header
             for skip in range(1, 10):
                 file.seek(0)
                 test = pd.read_excel(file, skiprows=skip)
@@ -101,7 +98,7 @@ def load_data(file):
 def load_default():
     """Load the local students.csv as fallback."""
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    csv_path  = os.path.join(base_dir, "data", "students.csv")
+    csv_path = os.path.join(base_dir, "data", "students.csv")
     df = pd.read_csv(csv_path)
     df["Average"] = df[["Math", "Science", "English"]].mean(axis=1).round(2)
     df["Status"]  = df.apply(get_status, axis=1)
@@ -116,7 +113,6 @@ with st.sidebar:
     st.title("Controls")
     st.markdown("---")
 
-    # File uploader — accepts CSV and Excel
     uploaded_file = st.file_uploader(
         "Upload your own dataset",
         type=["csv", "xlsx"],
@@ -126,17 +122,15 @@ with st.sidebar:
     st.markdown("---")
     st.subheader("Filter Students")
 
-    # Attendance slider — user drags to filter
     min_att, max_att = st.slider(
         "Attendance range (%)",
         min_value=0, max_value=100,
-        value=(0, 100)   # default: show all
+        value=(0, 100)
     )
 
-    # Status filter checkboxes
-    show_top  = st.checkbox("Show Top Performers",  value=True)
-    show_avg  = st.checkbox("Show Average",         value=True)
-    show_risk = st.checkbox("Show At-Risk",         value=True)
+    show_top  = st.checkbox("Show Top Performers", value=True)
+    show_avg  = st.checkbox("Show Average",        value=True)
+    show_risk = st.checkbox("Show At-Risk",        value=True)
 
     st.markdown("---")
     st.caption("Student Performance Analyzer")
@@ -163,13 +157,11 @@ else:
 # APPLY FILTERS
 # ============================================================
 
-# Filter by attendance range
 df_filtered = df[
     (df["Attendance"] >= min_att) &
     (df["Attendance"] <= max_att)
 ]
 
-# Filter by status checkboxes
 allowed_statuses = []
 if show_top:  allowed_statuses.append("Top Performer")
 if show_avg:  allowed_statuses.append("Average")
@@ -179,7 +171,7 @@ df_filtered = df_filtered[df_filtered["Status"].isin(allowed_statuses)]
 
 
 # ============================================================
-# MAIN PAGE — title and description
+# MAIN PAGE
 # ============================================================
 
 st.title("Student Performance Analyzer")
@@ -191,38 +183,36 @@ st.markdown("---")
 
 
 # ============================================================
-# SECTION 1: METRIC CARDS (top row)
+# SECTION 1: METRIC CARDS
 # ============================================================
 
-total        = len(df_filtered)
-class_avg    = df_filtered["Average"].mean().round(2) if total > 0 else 0
-top_count    = len(df_filtered[df_filtered["Status"] == "Top Performer"])
-risk_count   = len(df_filtered[df_filtered["Status"] == "At-Risk"])
-pass_rate    = round(len(df_filtered[df_filtered["Average"] >= RISK_AVG]) / total * 100, 1) if total > 0 else 0
-correlation  = df_filtered["Attendance"].corr(df_filtered["Average"]).round(2) if total > 0 else 0
+total       = len(df_filtered)
+class_avg   = df_filtered["Average"].mean().round(2) if total > 0 else 0
+top_count   = len(df_filtered[df_filtered["Status"] == "Top Performer"])
+risk_count  = len(df_filtered[df_filtered["Status"] == "At-Risk"])
+pass_rate   = round(len(df_filtered[df_filtered["Average"] >= RISK_AVG]) / total * 100, 1) if total > 0 else 0
+correlation = df_filtered["Attendance"].corr(df_filtered["Average"]).round(2) if total > 0 else 0
 
-# st.columns splits the row into equal sections
 col1, col2, col3, col4, col5, col6 = st.columns(6)
-
-col1.metric("Total Students",     total)
-col2.metric("Class Average",      class_avg)
-col3.metric("Pass Rate",          f"{pass_rate}%")
-col4.metric("Top Performers",     top_count)
-col5.metric("At-Risk Students",   risk_count)
-col6.metric("Attend. Correlation",correlation)
+col1.metric("Total Students",      total)
+col2.metric("Class Average",       class_avg)
+col3.metric("Pass Rate",           f"{pass_rate}%")
+col4.metric("Top Performers",      top_count)
+col5.metric("At-Risk Students",    risk_count)
+col6.metric("Attend. Correlation", correlation)
 
 st.markdown("---")
 
 
 # ============================================================
-# SECTION 2: CHARTS — two columns side by side
+# SECTION 2: CHARTS
 # ============================================================
 
 st.subheader("Performance Visualizations")
 
 chart_col1, chart_col2 = st.columns(2)
 
-# ── Chart 1: Subject averages bar chart ───────────────────
+# Chart 1: Subject averages bar chart
 with chart_col1:
     st.markdown("**Subject-wise class averages**")
 
@@ -256,7 +246,7 @@ with chart_col1:
     st.pyplot(fig1)
     plt.close()
 
-# ── Chart 2: Score distribution histogram ─────────────────
+# Chart 2: Score distribution histogram
 with chart_col2:
     st.markdown("**Distribution of student averages**")
 
@@ -283,7 +273,7 @@ with chart_col2:
 
 st.markdown("---")
 
-# ── Chart 3: Heatmap + Scatter (full width rows) ──────────
+# Charts 3 & 4: Heatmap + Scatter
 st.subheader("Deep Dive Charts")
 
 heat_col, scatter_col = st.columns(2)
@@ -354,7 +344,6 @@ st.markdown("---")
 
 st.subheader("Student Data Table")
 
-# Color the Status column visually using a helper
 def highlight_status(val):
     if val == "Top Performer":
         return "background-color: #E1F5EE; color: #0F6E56; font-weight: bold"
@@ -364,10 +353,10 @@ def highlight_status(val):
         return "background-color: #E6F1FB; color: #185FA5"
 
 display_df = df_filtered.sort_values("Average", ascending=False).reset_index(drop=True)
-display_df.index += 1  # start rank from 1
+display_df.index += 1
 
-# Apply color styling to Status column only
-styled_df = display_df.style.applymap(highlight_status, subset=["Status"])
+# FIX: .map() replaces deprecated .applymap() in Pandas 2.x
+styled_df = display_df.style.map(highlight_status, subset=["Status"])
 
 st.dataframe(styled_df, use_container_width=True, height=400)
 
@@ -388,7 +377,6 @@ with risk_col:
 
     if len(at_risk_df) > 0:
         for _, row in at_risk_df.iterrows():
-            # st.error shows a red box — perfect for at-risk alerts
             st.error(
                 f"**{row['Name']}** — "
                 f"Avg: {row['Average']} | "
@@ -428,7 +416,6 @@ st.subheader("Download Results")
 
 dl_col1, dl_col2 = st.columns(2)
 
-# Download filtered data as CSV
 with dl_col1:
     csv_data = df_filtered.to_csv(index=False).encode("utf-8")
     st.download_button(
@@ -438,7 +425,6 @@ with dl_col1:
         mime="text/csv"
     )
 
-# Download at-risk list as CSV
 with dl_col2:
     if len(at_risk_df) > 0:
         risk_csv = at_risk_df.to_csv(index=False).encode("utf-8")
