@@ -8,6 +8,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io
+import os
+import datetime
 
 # ============================================================
 # PAGE CONFIGURATION — must be the very first Streamlit call
@@ -42,40 +44,42 @@ def get_status(row):
         return "Average"
 
 
+import os  # add this at the very top of dashboard.py with your other imports
+
 def load_data(file):
     """Load CSV or Excel from an uploaded file object."""
     name = file.name
+
     if name.endswith(".csv"):
         df = pd.read_csv(file)
+
     elif name.endswith(".xlsx") or name.endswith(".xls"):
         # Try reading normally first
         df = pd.read_excel(file)
 
-    # If first column looks like a report title (not "Name"), skip rows
-    # and search for the real header row
-    if "Name" not in df.columns and "name" not in [c.lower() for c in df.columns]:
-        # Re-read the raw file scanning up to 10 rows for the real header
-        file.seek(0)  # rewind the file pointer back to the start
-        for skip in range(1, 10):
-            file.seek(0)
-            test = pd.read_excel(file, skiprows=skip)
-            test.columns = test.columns.str.strip()
-            if "Name" in test.columns:
-                df = test
-                break
+        # If first column looks like a report title (not "Name"), skip rows
+        # and search for the real header row
+        if "Name" not in df.columns and "name" not in [c.lower() for c in df.columns]:
+            # Re-read the raw file scanning up to 10 rows for the real header
+            for skip in range(1, 10):
+                file.seek(0)
+                test = pd.read_excel(file, skiprows=skip)
+                test.columns = test.columns.str.strip()
+                if "Name" in test.columns:
+                    df = test
+                    break
+
     else:
         return None, "Unsupported file format. Please upload a CSV or Excel file."
 
-    # ── Strip accidental spaces from column names ──────────
-    # e.g. " Math" or "Math " both become "Math"
+    # Strip accidental spaces from column names
     df.columns = df.columns.str.strip()
 
-    # ── Check all required columns exist ──────────────────
+    # Check all required columns exist
     required = ["Name", "Math", "Science", "English", "Attendance"]
     missing  = [col for col in required if col not in df.columns]
 
     if missing:
-        # Show the user exactly what columns we found vs what we need
         found   = list(df.columns)
         message = (
             f"Missing columns: **{', '.join(missing)}**\n\n"
@@ -85,7 +89,7 @@ def load_data(file):
         )
         return None, message
 
-    # ── Convert mark columns to numbers (in case they loaded as text) ──
+    # Convert mark columns to numbers in case they loaded as text
     for col in ["Math", "Science", "English", "Attendance"]:
         df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
 
@@ -96,7 +100,9 @@ def load_data(file):
 
 def load_default():
     """Load the local students.csv as fallback."""
-    df = pd.read_csv("data/students.csv")
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_path  = os.path.join(base_dir, "data", "students.csv")
+    df = pd.read_csv(csv_path)
     df["Average"] = df[["Math", "Science", "English"]].mean(axis=1).round(2)
     df["Status"]  = df.apply(get_status, axis=1)
     return df
