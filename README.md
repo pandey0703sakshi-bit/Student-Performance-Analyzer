@@ -4,6 +4,10 @@ A Python-based academic analytics tool that reads student data, identifies at-ri
 
 ---
 
+## Live Demo  
+https://student-performance-analyzer-s3u8rl5nqwqrcf97jiit5t.streamlit.app/
+
+---
 ## Features
 
 - Automated at-risk student detection using multi-factor threshold logic
